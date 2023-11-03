@@ -1,13 +1,102 @@
 <!DOCTYPE html>
-<html long="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="XC-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>To-Do app</title>
+<html lang ="en">
+    <head>
+        <meta charset="UTF-8" />                                                                 <!--specifies character encoding of doc-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />                 <!--defines the viewport settings for responsive web design-->
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />                                  <!--instructs Internet Explorer to use the latest rendering engine available-->
+        <title>To-Do List</title>
+        <link                                                                                   
+          href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700,900&display=swap"  
+          rel="stylesheet"
+        />                                                                                       <!--imports external CSS style sheet from Googe Fonts-->
+        <link rel="stylesheet" href="todoapp.css" />                                            <!--links to our external css file-->
+    </head>
 
-</head>
-<body>
+    <body>
+        <h1 class="title" >Stuff I need to do</h1>
 
-</body>
+        <div class="all-tasks">
+            <h2 class="task-list-title">My lists</h2>
+            <ul class="task-list"> <!--unordered list-->
+                <li class="active-list">Homework</li>
+                <li>Work</li>
+                <li>Chores</li>
+            </ul>
+
+            <form action="">
+                <input 
+                type="text"
+                class="new list"
+                placeholder="new list name"
+                aria-label="New List Name" 
+                />
+                <button class="btn list"
+                aria-label="Create New List">+</button>
+            </form>                                         <!--aria-label is what user can see-->
+        </div>
+
+        <div class="todo-list">
+            <div class="todo-header">
+                <h2 class="list-title">Homework</h2>
+                <p class="task-count">3 tasks remaining
+                </p>
+            </div>
+            
+            <div class="todo-body">
+                <div class="tasks">
+                    <input 
+                    type="checkbox" 
+                    id="task-1"
+                    /> 
+                    <label for="task-1">
+                        <span class="custom-checkbox"></span>
+                        Assignment 1
+                    </label>
+                </div>
+                <!--task one-->
+
+                <div class="tasks">
+                    <input 
+                    type="checkbox" 
+                    id="task-2"
+                    /> 
+                    <label for="task-2">
+                        <span class="custom-checkbox"></span>
+                        Assignment 2
+                    </label>
+                </div>
+                <!--task two-->
+
+                <div class="tasks">
+                    <input 
+                    type="checkbox" 
+                    id="task-1"
+                    /> 
+                    <label for="task-3">
+                        <span class="custom-checkbox"></span>
+                        Assignment 3
+                    </label>
+                </div>
+                <!--task three-->
+
+            </div>
+
+            <div class="new-task-creator">
+                <form action="">
+                    <input 
+                    type="text"
+                    class="new list"
+                    placeholder="new task name"
+                    aria-label="New Task Name" 
+                    />
+                    <button class="btn task"
+                    aria-label="Create New Task">+</button>
+                </form>  
+            </div>
+
+            <div class ="delete-stuff">
+                <button class="btn delete">Clear completed tasks</button>
+                <button class="btn delete">Delete tasks</button>
+            </div>
+    </body>
 </html>
