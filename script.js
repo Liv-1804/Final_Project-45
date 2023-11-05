@@ -1,63 +1,126 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Select elements
-    const taskInput = document.querySelector(".new.task");
-    const taskList = document.querySelector(".tasks");
-    const taskCount = document.querySelector(".task-count");
-    const clearCompletedButton = document.querySelector(".btn.delete");
+  const listsType = document.querySelector('[list-type]');
+  const newList = document.querySelector('[new-list]');
+  const newListInput = document.querySelector('[new-list-input]');
+  const listDisplay = document.querySelector('[list-display]');
+  const llistTitle = document.querySelector('[list-title]');
+  const taskCounter = document.querySelector('[task-counter]');
+  const tasksDisplay = document.querySelector('[tasks-display]');
+  const newTask = document.querySelector('[new-task]');
+  const newTaskInput = document.querySelector('[new-task-input]');
+  const clearCompleteTasksButton = document.querySelector('[clear-complete-tasks-button]');
+
+  const LOCAL_STORAGE_KEY = 'task.lists';
+  let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+  let selectedList = null;
+
+  function saveAndRender() {
+    save();
+    render();
+  }
   
-    // Add a new task
-    const addTask = (taskName) => {
-      if (taskName.trim() === "") return;
+  function save() {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(lists));
+  }
   
-      const taskItem = document.createElement("div");
-      taskItem.className = "task";
-      taskItem.innerHTML = `
-        <input type="checkbox" />
-        <label>${taskName}</label>
-      `;
+  function render() {
+    renderLists();
   
-      taskList.appendChild(taskItem);
-      taskInput.value = "";
+    if (selectedList) {
+      listDisplay.style.display = '';
+      llistTitle.innerText = selectedList.name;
+      renderTaskCount();
+      clearElement(tasksDisplay);
+      renderTasks();
+    } else {
+      listDisplay.style.display = 'none';
+    }
+  }
   
-      updateTaskCount();
-    };
-  
-    // Update the task count
-    const updateTaskCount = () => {
-      const tasks = taskList.querySelectorAll(".task");
-      const completedTasks = taskList.querySelectorAll("input:checked");
-      const remainingTasks = tasks.length - completedTasks.length;
-  
-      taskCount.textContent = `${remainingTasks} task${remainingTasks !== 1 ? "s" : ""} remaining`;
-    };
-  
-    // Clear completed tasks
-    clearCompletedButton.addEventListener("click", () => {
-      const completedTasks = taskList.querySelectorAll("input:checked");
-      completedTasks.forEach((task) => {
-        task.closest(".task").remove();
+  function renderTasks() {
+    selectedList.tasks.forEach(task => {
+      const taskElement = document.createElement('div');
+      taskElement.classList.add('task');
+      const checkbox = taskElement.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = task.id;
+      checkbox.checked = task.complete;
+      checkbox.addEventListener('change', () => {
+        task.complete = checkbox.checked;
+        saveAndRender();
       });
-  
-      updateTaskCount();
+      const label = taskElement.createElement('label');
+      label.htmlFor = task.id;
+      label.textContent = task.name;
+      taskElement.appendChild(checkbox);
+      taskElement.appendChild(label);
+      tasksDisplay.appendChild(taskElement);
     });
+  }
   
-    // Create a new task when the "Add" button is clicked
-    taskInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        addTask(taskInput.value);
+  function renderTaskCount() {
+    const incompleteTaskCount = selectedList.tasks.filter(task => !task.complete).length;
+    const taskString = incompleteTaskCount === 1 ? "task" : "tasks";
+    taskCounter.innerText = `${incompleteTaskCount} ${taskString} remaining`;
+  }
+  
+  function renderLists() {
+    clearElement(listsType);
+    lists.forEach(list => {
+      const listElement = document.createElement('li');
+      listElement.dataset.listId = list.id;
+      listElement.classList.add('list-name');
+      listElement.textContent = list.name;
+      if (list === selectedList) {
+        listElement.classList.add('active-list');
       }
+      listElement.addEventListener('click', () => {
+        selectedList = list;
+        saveAndRender();
+      });
+      listsType.appendChild(listElement);
     });
+  }
   
-    // Create a new task when the "+" button is clicked
-    document.querySelector(".btn.task").addEventListener("click", () => {
-      addTask(taskInput.value);
-    });
+  function clearElement(element) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+  }
   
-    // Event delegation to handle checkbox click events
-    taskList.addEventListener("change", (event) => {
-      if (event.target.type === "checkbox") {
-        updateTaskCount();
-      }
-    });
+  listsType.addEventListener('click', e => {
+    if (e.target.tagName.toLowerCase() === 'li') {
+      selectedList = lists.find(list => list.id === e.target.dataset.listId);
+      saveAndRender();
+    }
   });
   
+  newList.addEventListener('submit', e => {
+    e.preventDefault();
+    const listName = newListInput.value.trim();
+    if (listName) {
+      lists.push({ id: Date.now().toString(), name: listName, tasks: [] });
+      newListInput.value = '';
+      saveAndRender();
+    }
+  });
+  
+  newTask.addEventListener('submit', e => {
+    e.preventDefault();
+    const taskName = newTaskInput.value.trim();
+    if (taskName && selectedList) {
+      selectedList.tasks.push({ id: Date.now().toString(), name: taskName, complete: false });
+      newTaskInput.value = '';
+      saveAndRender();
+    }
+  });
+  
+  clearCompleteTasksButton.addEventListener('click', e => {
+    if (selectedList) {
+      selectedList.tasks = selectedList.tasks.filter(task => !task.complete);
+      saveAndRender();
+    }
+  });
+
+  render();
+});
