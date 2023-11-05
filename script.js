@@ -14,16 +14,16 @@ document.addEventListener("DOMContentLoaded", function () {
   let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
   let selectedList = null;
 
-  function saveAndRender() {
+  function saveAndDisplay() {
     save();
-    render();
+    display();
   }
   
   function save() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(lists));
   }
   
-  function render() {
+  function display() {
     renderLists();
   
     if (selectedList) {
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
       checkbox.checked = task.complete;
       checkbox.addEventListener('change', () => {
         task.complete = checkbox.checked;
-        saveAndRender();
+        saveAndDisplay();
       });
       const label = taskElement.createElement('label');
       label.htmlFor = task.id;
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       listElement.addEventListener('click', () => {
         selectedList = list;
-        saveAndRender();
+        saveAndDisplay();
       });
       listsType.appendChild(listElement);
     });
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
   listsType.addEventListener('click', e => {
     if (e.target.tagName.toLowerCase() === 'li') {
       selectedList = lists.find(list => list.id === e.target.dataset.listId);
-      saveAndRender();
+      saveAndDisplay();
     }
   });
   
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (listName) {
       lists.push({ id: Date.now().toString(), name: listName, tasks: [] });
       newListInput.value = '';
-      saveAndRender();
+      saveAndDisplay();
     }
   });
   
@@ -111,16 +111,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (taskName && selectedList) {
       selectedList.tasks.push({ id: Date.now().toString(), name: taskName, complete: false });
       newTaskInput.value = '';
-      saveAndRender();
+      saveAndDisplay();
     }
   });
   
   clearCompleteTasksButton.addEventListener('click', e => {
     if (selectedList) {
       selectedList.tasks = selectedList.tasks.filter(task => !task.complete);
-      saveAndRender();
+      saveAndDisplay();
     }
   });
 
-  render();
+  display();
 });
