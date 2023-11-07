@@ -81,12 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
       listElement.classList.add('list-name');
       listElement.textContent = list.name;
 
-      // Add the "Delete List" button
-      const deleteButton = document.createElement('button');
-      deleteButton.classList.add('btn', 'delete-list');
-      deleteButton.textContent = 'Delete';
-      listElement.appendChild(deleteButton);
-
       if (list === selectedList) {
         listElement.classList.add('active-list');
       }
@@ -139,23 +133,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Listen for click events on the entire document
   document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('delete-list')) {
-      const listId = e.target.parentElement.dataset.listId;
-      deleteList(listId);
+    if (e.target.id === 'delete-list-button') {
+      deleteSelectedList();
     }
-  });
+  });      
   
-  // Function to delete a list
-  function deleteList(listId) {
-    // Find the index of the list with the given ID in the 'lists' array
-    const listIndex = lists.findIndex(list => list.id === listId);
-    if (listIndex !== -1) {
-      // Remove the list from the 'lists' array
-      lists.splice(listIndex, 1);
-      // Save the changes to local storage and update the display
-      saveAndDisplay();
+  
+  function deleteSelectedList() {
+    if (selectedList) {
+      const listId = selectedList.id;
+      const listIndex = lists.findIndex(list => list.id === listId);
+      if (listIndex !== -1) {
+        lists.splice(listIndex, 1); // Remove the selected list
+        selectedList = null; // Deselect the list
+        saveAndDisplay();
+      }
     }
   }
 
