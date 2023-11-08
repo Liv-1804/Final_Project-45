@@ -29,177 +29,193 @@
   a fraction to use available space so it makes equal spacing. */
   
   .title {
-    grid-area: header; /* takes up top area*/
+    grid-area: header; /* Takes up top area*/
     text-align: center;
-    font-size: calc(7vw + 2rem); /* uses viewport and rem to set min size and allow it to grow w screen*/
+    font-size: calc(7vw + 2rem); /* Use viewport and rem to set min size and allow it to grow w screen*/
     font-weight: 900;
     color: rgba(0, 0, 0, 0.1);
     letter-spacing: 2px;
-    margin: -0.3em 0 0.5em; /* makes it higher on the screen*/
+    margin: -0.3em 0 0.5em; /* Makes it higher on the screen*/
   }
   
-  .all-tasks {
-    grid-area: lists;
-  }
-  
-  .task-list {
-    font-size: 1.2rem;
-    line-height: 1.7;
-    list-style: circle;
-    padding-left: 1.1em;
-  }
-  
-  .list-name {
-    cursor: pointer;
-  }
-  
-  .list-name:hover {
-    opacity: 0.7;
-  }
-  
-  form {
-    display: flex;
-  }
-  
-  .btn {
-    cursor: pointer;
-    background: 0;
-    border: 0;
-    padding: 0;
-    color: inherit;
-  }
-  
-  .btn.create {
-    font-size: 1.5rem;
-    font-weight: 900;
-    margin-right: 0.25em;
-    transition: opacity 250ms ease-in;
-  }
-  
-  .btn.create:hover {
-    opacity: 0.7;
-  }
-  
-  .btn.delete {
-    opacity: 0.7;
-    font-size: 1rem;
-    transition: color 200ms;
-  }
-  
-  .btn.delete:hover {
-    color: var(--clr-warning);
-  }
-  
-  .new {
-    background: transparent;
-    border: 0;
-    color: inherit;
-    border-bottom: 1px solid currentColor;
-    font-size: inherit;
-    outline: none;
-    padding: 0.25em;
-    transition: border-bottom 150ms ease-in;
-    order: 2;
-  }
-  
-  .new::-webkit-input-placeholder {
+.all-tasks {
+    grid-area: lists
+}
+
+.task-list {
+    font-size: 1.2rem          /* Set the font size to 1.2 rem units */
+    line-height: 1.7          /* Set the line height to 1.7 (1.7 times the font size) */
+    list-style: circle        /* Use a circle as the list item marker style */
+    padding-left: 1.1em       /* Add left padding of 1.1em to list items */
+}
+
+.list-name {
+    cursor: pointer           /* Change the cursor to a pointer (usually a hand) on hover */
+}
+
+.list-name:hover {
+    opacity: 0.7              /* Reduce the opacity 70% on hover so user can see where mouse is at*/
+}
+
+form {
+    display: flex             /* Display form elements in a flex layout */
+}
+
+.btn {
+    cursor: pointer           /* Change the cursor to a pointer (usually a hand) */
+    background: 0             /* Set the background to 0 (transparent) */
+    border: 0                 /* Remove the border */
+    padding: 0                /* Remove padding */
+    color: inherit            /* Inherit the color from the parent element */
+}
+
+.btn.create {
+    font-size: 1.5rem         /* Set the font size to 1.5 rem units */
+    font-weight: 900          /* Set the font weight to 900 (bold) */
+    margin-right: 0.25em      /* Add right margin of 0.25em */
+    transition: opacity 250ms ease-in  /* Add a smooth opacity transition over 250ms */
+}
+
+    .btn.create:hover {
+        opacity: 0.7              /* Reduce the opacity to 70% on hover so the user can see where the mouse is @ */
+    }
+
+.btn.delete {
+    opacity: 0.7;           /* Set opacity to 0.7 (70%) */
+    font-size: 1rem;        /* Set the font size to 1 rem unit */
+    transition: color 200ms; /* Apply a color transition over 200ms */
+}
+
+.btn.delete:hover {
+    color: var(--clr-warning);  /* Change the text color to a custom variable on hover */
+}
+
+.new {
+    background: transparent; /* Set the background to transparent */
+    border: 0;               /* Remove the border */
+    color: inherit;          /* Inherit the color from the parent element */
+    border-bottom: 1px solid currentColor;  /* Add a 1px solid border at the bottom using the current color */
+    font-size: inherit;      /* Inherit the font size from the parent element */
+    outline: none;           /* Remove the outline (focus) style */
+    padding: 0.25em;         /* Add padding of 0.25em */
+    transition: border-bottom 150ms ease-in;  /* Apply a border transition over 150ms with ease-in timing */
+    order: 2;                /* Set the order within a flex container to 2 */
+}
+
+/* These CSS rules set the placeholder opacity for input elements with the class "new" */
+.new::-webkit-input-placeholder {
     opacity: 0.4;
-  }
-  
-  .new:-ms-input-placeholder {
+}
+
+.new:-ms-input-placeholder {
     opacity: 0.4;
-  }
-  
-  .new::-ms-input-placeholder {
+}
+
+.new::-ms-input-placeholder {
     opacity: 0.4;
-  }
-  
-  .new::placeholder {
+}
+
+.new::placeholder {
     opacity: 0.4;
-  }
-  
-  .new:focus {
-    border-bottom-width: 3px;
-  }
-  
-  .new:focus::-webkit-input-placeholder {
+}
+
+/* This CSS rule defines the focus state for elements with the class "new" */
+.new:focus {
+    border-bottom-width: 3px;  /* Increase the border width to 3px on focus */
+}
+
+.new:focus::-webkit-input-placeholder {
     opacity: 0.15;
-  }
-  
-  .new:focus:-ms-input-placeholder {
+}
+
+.new:focus:-ms-input-placeholder {
     opacity: 0.15;
-  }
+}
   
-  .new:focus::-ms-input-placeholder {
+.new:focus::-ms-input-placeholder {
     opacity: 0.15;
-  }
+}
   
-  .new:focus::placeholder {
-    opacity: 0.15;
-  }
-  
-  .new.list {
-    font-size: 1.1rem;
-  }
-  
-  .new.task {
-    margin-bottom: 0;
-  }
-  
-  .active-list {
-    font-weight: 700;
-  }
-  
-  .todo-list {
-    --spacer: 2rem;
-    grid-area: active;
-    background: var(--clr-light);
-    color: var(--clr-dark);
-  }
-  
-  .todo-header {
-    padding: var(--spacer);
+.new:focus::placeholder {
+    opacity: 0.15
+}
+
+/* styles elements with both "new" and "list" classes */
+.new.list {
+    font-size: 1.1rem
+}
+
+/* the margin at the bottom for elements with the class "new" and "task" */
+.new.task {
+    margin-bottom: 0
+}
+
+/* sets the font weight for elements with the class "active-list" */
+.active-list {
+    font-weight: 700
+}
+
+/* defines styles for elements with the class "todo-list" */
+.todo-list {
+    --spacer: 2rem;             /* Custom variable (--spacer) and set its value to 2rem */
+    grid-area: active;         /* Assign the "active" grid area to elements with this CSS property */
+    background:var(--clr-light); 
+    color: var(--clr-dark);   
+
+}
+
+/* styles elements with the class "todo-header" */
+.todo-header {
+    padding: var(--spacer); 
     background: #e4e4e4;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-  }
-  
-  .list-title {
-    margin: 0 1em 0 0;
-  }
-  
-  .task-count {
+    justify-content: space-between
+}
+
+/* adjusts the margin for elements with the class "list-title" */
+.list-title {
+    margin: 0 1em 0 0
+}
+
+/* sets the margin and font size for elements with the class "task-count" */
+.task-count {
     margin: 0;
-    font-size: 1rem;
-  }
-  
-  .todo-body {
+    font-size: 1rem
+}
+
+/* defines styles for elements with the class "todo-body" */
+.todo-body {
     padding: var(--spacer);
-    position: relative;
-  }
-  
-  .new-task-creator .create {
-    color: var(--clr-primary);
-  }
-  
-  [type="checkbox"] {
+    position: relative
+}
+
+/* changes the color for elements with the class "new-task-creator" and "create" */
+.new-task-creator .create {
+    color: var(--clr-primary)
+}
+
+/* hides the checkbox with the attribute selector for type="checkbox" */
+[type="checkbox"] {
     opacity: 0;
-    position: absolute;
-  }
-  
-  .task label {
+    position: absolute
+}
+
+/* defines styles for elements with the class "task label" */
+.task label {
     display: flex-inline;
     align-items: center;
+    position: relative
+}
+
+/* styles elements with the class "task" */
+.task {
     position: relative;
-  }
-  
-  .task {
-    position: relative;
-    margin-bottom: 1.25em;
-  }
-  
-  .task::after {
+    margin-bottom: 1.25em
+}
+
+/* adds an underline element after elements with the class "task" */
+.task::after {
     content: "";
     position: absolute;
     right: 0;
@@ -207,10 +223,11 @@
     bottom: -0.5em;
     height: 1px;
     background: currentColor;
-    opacity: 0.1;
-  }
-  
-  .custom-checkbox {
+    opacity: 0.1
+}
+
+/* defines styles for elements with the class "custom-checkbox" */
+.custom-checkbox {
     --size: 0.75em;
     display: inline-block;
     width: var(--size);
@@ -220,30 +237,32 @@
     border: 2px solid currentColor;
     border-radius: 50%;
     -webkit-transform: scale(1);
-            transform: scale(1);
-    transition: -webkit-transform 300ms ease-in-out;
-    transition: transform 300ms ease-in-out;
-    transition: transform 300ms ease-in-out, -webkit-transform 300ms ease-in-out;
-  }
-  
-  .task:hover .custom-checkbox,
-  [type="checkbox"]:focus + label .custom-checkbox {
+    transform: scale(1);
+    transition: -webkit-transform 300ms ease-in-out, transform 300ms ease-in-out
+}
+
+/* changes the scale and color of elements on hover or focus */
+.task:hover .custom-checkbox,
+[type="checkbox"]:focus + label .custom-checkbox {
     -webkit-transform: scale(1.2);
-            transform: scale(1.2);
-    color: var(--clr-primary);
-  }
-  
-  [type="checkbox"]:checked + label .custom-checkbox {
+    transform: scale(1.2);
+    color: var(--clr-primary)
+}
+
+/* styles checked checkboxes */
+[type="checkbox"]:checked + label .custom-checkbox {
     background: var(--clr-primary);
     border-color: var(--clr-primary);
-    box-shadow: inset 0 0 0px 2px white;
-  }
-  
-  [type="checkbox"]:checked + label {
-    opacity: 0.5;
-  }
-  
-  .task label::after {
+    box-shadow: inset 0 0 0px 2px white
+}
+
+/* adjusts the opacity for checked checkboxes */
+[type="checkbox"]:checked + label {
+    opacity: 0.5
+}
+
+/* adds a horizontal line after checked checkboxes */
+.task label::after {
     content: "";
     position: absolute;
     left: 0;
@@ -253,27 +272,27 @@
     height: 3px;
     background: currentColor;
     -webkit-transform: scaleX(0);
-            transform: scaleX(0);
+    transform: scaleX(0);
     -webkit-transform-origin: right;
-            transform-origin: right;
-    transition: -webkit-transform 150ms ease-in-out;
-    transition: transform 150ms ease-in-out;
-    transition: transform 150ms ease-in-out, -webkit-transform 150ms ease-in-out;
-  }
-  
-  [type="checkbox"]:checked + label::after {
+    transform-origin: right;
+    transition: -webkit-transform 150ms ease-in-out, transform 150ms ease-in-out
+}
+
+/* scales the line after checked checkboxes */
+[type="checkbox"]:checked + label::after {
     -webkit-transform: scaleX(1);
-            transform: scaleX(1);
+    transform: scaleX(1);
     -webkit-transform-origin: left;
-            transform-origin: left;
-  }
-  
-  .delete-stuff {
+    transform-origin: left
+}
+
+/* styles elements with the class "delete-stuff" */
+.delete-stuff {
     display: flex;
     justify-content: space-evenly;
     position: absolute;
     width: 100%;
     left: 0;
     bottom: -35px;
-    color: var(--clr-light);
-  }
+    color: var(--clr-light)
+}
