@@ -20,12 +20,15 @@
             <ul class="task-list" list-type >  <!--unordered list-->
                 <li class="active-list" list-type-id="Homework">
                     Homework
+                    <button class="btn edit-list">Edit</button>
                 </li>
                 <li list-type-id="Work">
                     Work
+                    <button class="btn edit-list">Edit</button>
                 </li>
                 <li list-type-id="Chores">
                     Chores
+                    <button class="btn edit-list">Edit</button>
                 </li>
             </ul>
 
@@ -64,6 +67,19 @@
                     <button class="btn task" aria-label="Create New Task">+</button>
                 </form>  
             </div>
+
+            <div id="task-edit-modal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <h2>Edit Task</h2>
+                  <input 
+                    type="text" 
+                    id="edited-task-name" 
+                    placeholder="New task name">
+                  <button id="save-task-changes">Save Changes</button>
+                </div>
+            </div>
+              
 
             <div class ="delete-stuff">
                 <button class="btn delete" clear-complete-tasks-button>

@@ -59,8 +59,16 @@ document.addEventListener("DOMContentLoaded", function () {
       label.htmlFor = task.id;
       label.textContent = task.name;
 
+      const editButton = document.createElement('button');
+      editButton.classList.add('btn', 'edit-task'); // You can define a new class for task editing buttons
+      editButton.textContent = 'Edit';
+      editButton.addEventListener('click', () => {
+        openTaskEditModal(task);
+      });
+
       taskElement.appendChild(checkbox);
       taskElement.appendChild(label);
+      taskElement.appendChild(editButton); // Add the edit button to the task element
       tasksDisplay.appendChild(taskElement);
     });
   }
@@ -80,6 +88,11 @@ document.addEventListener("DOMContentLoaded", function () {
       listElement.dataset.listId = list.id;
       listElement.classList.add('list-name');
       listElement.textContent = list.name;
+
+      const editButton = document.createElement('button');
+      editButton.classList.add('btn', 'edit-list');
+      editButton.textContent = 'Edit';
+      listElement.appendChild(editButton);
 
       if (list === selectedList) {
         listElement.classList.add('active-list');
@@ -137,9 +150,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (e.target.id === 'delete-list-button') {
       deleteSelectedList();
     }
-  });      
-  
-  
+  });
+
   function deleteSelectedList() {
     if (selectedList) {
       const listId = selectedList.id;
@@ -150,6 +162,55 @@ document.addEventListener("DOMContentLoaded", function () {
         saveAndDisplay();
       }
     }
+  }
+  
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('edit-list')) {
+        const listElement = e.target.parentElement; // Get the list item
+        const listId = listElement.dataset.listId;
+        const listName = listElement.textContent.trim();
+
+        const newName = prompt('Edit list name:', listName);
+        if (newName !== null) {
+            editList(listId, newName);
+        }
+    }
+  });
+
+  function editList(listId, newName) {
+    const list = lists.find(list => list.id === listId);
+    if (list) {
+        list.name = newName;
+        saveAndDisplay();
+    }
+  }
+
+  function openTaskEditModal(task) {
+    const modal = document.getElementById('task-edit-modal');
+    const editedTaskNameInput = document.getElementById('edited-task-name');
+    const saveTaskChangesButton = document.getElementById('save-task-changes');
+  
+    // Set the input field with the current task name
+    editedTaskNameInput.value = task.name;
+  
+    // Show the modal
+    modal.style.display = 'block';
+  
+    // Handle saving changes
+    saveTaskChangesButton.addEventListener('click', () => {
+      const newName = editedTaskNameInput.value.trim();
+      if (newName) {
+        task.name = newName;
+        saveAndDisplay();
+        modal.style.display = 'none'; // Close the modal
+      }
+    });
+
+    // Handle closing the modal
+    const closeModalButton = document.querySelector('.close');
+    closeModalButton.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
   }
 
   //initializing the application's initial state

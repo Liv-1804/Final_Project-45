@@ -43,14 +43,14 @@
 }
 
 .task-list {
-    font-size: 1.2rem          /* Set the font size to 1.2 rem units */
-    line-height: 1.7          /* Set the line height to 1.7 (1.7 times the font size) */
-    list-style: circle        /* Use a circle as the list item marker style */
-    padding-left: 1.1em       /* Add left padding of 1.1em to list items */
+    font-size: 1.2rem;          /* Set the font size to 1.2 rem units */
+    line-height: 1.7;          /* Set the line height to 1.7 (1.7 times the font size) */
+    list-style: circle;        /* Use a circle as the list item marker style */
+    padding-left: 1.1em;       /* Add left padding of 1.1em to list items */
 }
 
 .list-name {
-    cursor: pointer           /* Change the cursor to a pointer (usually a hand) on hover */
+    cursor: pointer;           /* Change the cursor to a pointer (usually a hand) on hover */
 }
 
 .list-name:hover {
@@ -62,18 +62,18 @@ form {
 }
 
 .btn {
-    cursor: pointer           /* Change the cursor to a pointer (usually a hand) */
-    background: 0             /* Set the background to 0 (transparent) */
-    border: 0                 /* Remove the border */
-    padding: 0                /* Remove padding */
-    color: inherit            /* Inherit the color from the parent element */
+    cursor: pointer;           /* Change the cursor to a pointer (usually a hand) */
+    background: 0;             /* Set the background to 0 (transparent) */
+    border: 0;                 /* Remove the border */
+    padding: 0;                /* Remove padding */
+    color: inherit;            /* Inherit the color from the parent element */
 }
 
 .btn.create {
-    font-size: 1.5rem         /* Set the font size to 1.5 rem units */
-    font-weight: 900          /* Set the font weight to 900 (bold) */
-    margin-right: 0.25em      /* Add right margin of 0.25em */
-    transition: opacity 250ms ease-in  /* Add a smooth opacity transition over 250ms */
+    font-size: 1.5rem;         /* Set the font size to 1.5 rem units */
+    font-weight: 900;          /* Set the font weight to 900 (bold) */
+    margin-right: 0.25em;      /* Add right margin of 0.25em */
+    transition: opacity 250ms ease-in;  /* Add a smooth opacity transition over 250ms */
 }
 
     .btn.create:hover {
@@ -88,6 +88,16 @@ form {
 
 .btn.delete:hover {
     color: var(--clr-warning);  /* Change the text color to a custom variable on hover */
+}
+
+/* Add styles for the edit button */
+.btn.edit-list {
+    background: none; /* Set the background to none (transparent) */
+    border: 0; /* Remove the border */
+    padding: 0; /* Remove padding */
+    color: inherit; /* Inherit the color from the parent element */
+    cursor: pointer; /* Change the cursor to a pointer (usually a hand) */
+    margin-left: 10px; /* Add left margin to separate it from the list text */
 }
 
 .new {
@@ -203,7 +213,7 @@ form {
 
 /* defines styles for elements with the class "task label" */
 .task label {
-    display: flex-inline;
+    display: inline-flex;
     align-items: center;
     position: relative
 }
@@ -267,7 +277,7 @@ form {
     position: absolute;
     left: 0;
     right: 0;
-    left: 1.5em;
+    /*left: 1.5em;*/
     top: 50%;
     height: 3px;
     background: currentColor;
@@ -296,3 +306,32 @@ form {
     bottom: -35px;
     color: var(--clr-light)
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+  }
+  
+  .modal-content {
+    background-color: #f4f4f4;
+    margin: 15% auto;
+    padding: 20px;
+    width: 60%;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+  
+  .close {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+  }
+  
