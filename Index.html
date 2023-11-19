@@ -18,18 +18,6 @@
         <div class="all-tasks">
             <h2 class="task-list-title">My lists</h2>
             <ul class="task-list" list-type >  <!--unordered list-->
-                <li class="active-list" list-type-id="Homework">
-                    Homework
-                    <button class="btn edit-list">Edit</button>
-                </li>
-                <li list-type-id="Work">
-                    Work
-                    <button class="btn edit-list">Edit</button>
-                </li>
-                <li list-type-id="Chores">
-                    Chores
-                    <button class="btn edit-list">Edit</button>
-                </li>
             </ul>
 
             <form new-list>                         <!-- Add new-list attribute -->
@@ -42,6 +30,18 @@
                 />
                 <button class="btn list" aria-label="Create New List">+</button>
             </form>                                          <!--aria-label is what user can see-->
+
+            <div id="list-edit-modal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <h2>Edit List</h2>
+                  <input 
+                    type="text" 
+                    id="edited-list-name" 
+                    placeholder="New list name">
+                  <button id="save-list-changes">Save Changes</button>
+                </div>
+            </div>  
         </div>
 
         <div class="todo-list" list-display>  <!-- Add list-display attribute -->
@@ -83,8 +83,7 @@
                 ></textarea>
                   <button id="save-task-changes">Save Changes</button>
                 </div>
-            </div>
-              
+            </div>  
 
             <div class ="delete-stuff">
                 <button class="btn delete" clear-complete-tasks-button>
@@ -93,5 +92,6 @@
                 <!-- Add clear-complete-tasks-button attribute -->
                 <button class="btn delete" id="delete-list-button">Delete List</button>
             </div>
+        </div>
     </body>
 </html>

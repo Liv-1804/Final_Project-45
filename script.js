@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const newList = document.querySelector('[new-list]');
   const newListInput = document.querySelector('[new-list-input]');
   const listDisplay = document.querySelector('[list-display]');
-  const llistTitle = document.querySelector('[list-title]');
+  const listTitle = document.querySelector('.list-title');
   const taskCounter = document.querySelector('[task-counter]');
   const tasksDisplay = document.querySelector('[tasks-display]');
   const newTask = document.querySelector('[new-task]');
@@ -15,8 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
   let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
   let selectedList = null;
 
-  // Variables to track the current edited task
+  // Variables to track the current edited task and current edited list
   let editedTaskId = null;
+  let editedListId = null;
 
   // save() - save the lists 
   // display() - controls what is displayed in the UI
@@ -26,17 +27,17 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Event listener for closing the task edit modal
-  document.querySelector('.close').addEventListener('click', onCloseModal);
+  document.querySelector('.close').addEventListener('click', onTaskCloseModal);
 
-  function onCloseModal() {
+  function onTaskCloseModal() {
     const modal = document.getElementById('task-edit-modal');
     modal.style.display = 'none';
   }
 
   // Event listener for overlay click to close the modal
   document.getElementById('task-edit-modal').addEventListener('click', function (event) {
-    if (event.target === this) {
-      onCloseModal();
+    if (event.target === this || event.target.classList.contains('close')) {
+      onTaskCloseModal();
     }
   });
 
@@ -54,11 +55,42 @@ document.addEventListener("DOMContentLoaded", function () {
     editedTask.note = newTaskNote;
 
     // Hide the modal
-    onCloseModal();
+    onTaskCloseModal();
 
     // Save and display after updating the task
     saveAndDisplay();
   });
+
+  // Event listener for closing the list edit modal
+  document.querySelector('.close').addEventListener('click', onListCloseModal);
+
+  function onListCloseModal() {
+    const modal = document.getElementById('list-edit-modal');
+    modal.style.display = 'none';
+  }
+
+  // Event listener for overlay click to close the modal
+  document.getElementById('list-edit-modal').addEventListener('click', function (event) {
+    if (event.target === this || event.target.classList.contains('close')) {
+      onListCloseModal();
+    }
+  });
+
+  // Event listener for save list changes button click
+  document.getElementById('save-list-changes').addEventListener('click', function () {
+    // Get the edited values from the modal
+    const newListName = document.getElementById('edited-list-name').value;
+
+    // Find the list with the editedListId
+    const editedList = lists.find(list => list.id === editedListId);
+
+    // Update the list details
+    if (editedList) {
+      editedList.name = newListName;
+      onListCloseModal();
+      saveAndDisplay();
+    }
+  });  
 
   function save() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(lists));
@@ -69,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (selectedList) {
       listDisplay.style.display = '';
-      llistTitle.innerText = selectedList.name;
+      listTitle.innerText = selectedList.name;
       displayTaskCount();
       clearElement(tasksDisplay);
       displayTasks();
@@ -158,9 +190,26 @@ document.addEventListener("DOMContentLoaded", function () {
       listElement.classList.add('list-name');
       listElement.textContent = list.name;
 
+      // Function to handle list editing
+      function editList(listId, listName) {
+        // Show the modal
+        document.getElementById('list-edit-modal').style.display = 'block';
+
+        // Set the values in the modal
+        document.getElementById('edited-list-name').value = listName;
+
+        // Save the task ID for reference
+        editedListId = listId;
+      }
+
+      // Event listener for edit button click
       const editButton = document.createElement('button');
-      editButton.classList.add('btn', 'edit-list');
+      editButton.classList.add('btn', 'edit-list-button');
       editButton.textContent = 'Edit';
+      editButton.addEventListener('click', function (event) {
+        event.stopPropagation();
+        editList(list.id, list.name);
+      });
       listElement.appendChild(editButton);
 
       if (list === selectedList) {
@@ -233,29 +282,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   
-  document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('edit-list')) {
-        const listElement = e.target.parentElement; // Get the list item
-        const listId = listElement.dataset.listId;
-        const listName = listElement.textContent.trim();
 
-        const newName = prompt('Edit list name:', listName);
-        if (newName !== null) {
-            editList(listId, newName);
-        }
+  // Event listener for opening the list edit modal
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('edit-list-button')) {
+      const listElement = e.target.parentElement;
+      const listId = listElement.dataset.listId;
+      const listName = listElement.textContent.trim();
+
+      openListEditModal(listId, listName);
     }
   });
 
-  function editList(listId, newName) {
-    const list = lists.find(list => list.id === listId);
-    if (list) {
-        list.name = newName;
-        saveAndDisplay();
-    }
+  function openListEditModal(listId, listName) {
+    // Show the modal
+    const listEditModal = document.getElementById('list-edit-modal');
+    listEditModal.style.display = 'block';
+  
+    // Set the values in the modal
+    document.getElementById('edited-list-name').value = listName;
+  
+    // Save the list ID for reference
+    editedListId = listId;
   }
 
-   // Event listener for opening the task edit modal
-   tasksDisplay.addEventListener('click', (e) => {
+  // Event listener for opening the task edit modal
+  tasksDisplay.addEventListener('click', (e) => {
     if (e.target.classList.contains('edit-task-button')) {
       const taskId = e.target.parentElement.dataset.taskId;
       const task = selectedList.tasks.find(task => task.id === taskId);
