@@ -50,11 +50,18 @@ a fraction to use available space so it makes equal spacing. */
 }
 
 .list-name {
-  cursor: pointer;           /* Change the cursor to a pointer (usually a hand) on hover */
+  cursor: pointer;                       /* Change the cursor to a pointer (usually a hand) on hover */
+  display: flex;                         /* Use flexbox for better alignment */
+  align-items: center; /* Center align items vertically */
+  justify-content: var(--spacer);        /* Add space between list name and edit button */
 }
 
 .list-name:hover {
   opacity: 0.7              /* Reduce the opacity 70% on hover so user can see where mouse is at*/
+}
+
+.list-name .btn.edit-list-button {
+  margin-left: 20px; /* Add margin to the edit button */
 }
 
 form {
@@ -197,7 +204,11 @@ form {
 /* defines styles for elements with the class "todo-body" */
 .todo-body {
   padding: var(--spacer);
-  position: relative
+  position: relative;
+  display: grid; /* Use Grid layout */
+  grid-template-columns: auto; /* Set columns as needed */
+  gap: 1em; /* Adjust the gap between items */
+  align-items: center; /* Vertically align items */
 }
 
 /* changes the color for elements with the class "new-task-creator" and "create" */
@@ -221,8 +232,17 @@ form {
 /* styles elements with the class "task" */
 .task {
   position: relative;
-  margin-bottom: 1.25em
+  margin-bottom: 1.00em;
+  align-items: center; /* Center align items vertically */
+  justify-content: var(--spacer); /* Add space between task name and edit button */
+
 }
+
+.task .btn.edit-task-button {
+  margin-left: 20px; /* Add margin to the edit button */
+}
+
+
 
 /* adds an underline element after elements with the class "task" */
 .task::after {
@@ -277,7 +297,6 @@ form {
   position: absolute;
   left: 0;
   right: 0;
-  /*left: 1.5em;*/
   top: 50%;
   height: 3px;
   background: currentColor;
@@ -301,9 +320,8 @@ form {
   display: flex;
   justify-content: space-evenly;
   position: absolute;
-  width: 100%;
-  left: 0;
-  bottom: -35px;
+  width: 17%;
+  margin-top: 40px;
   color: var(--clr-light)
 }
 
