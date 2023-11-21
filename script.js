@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Get the edited values from the modal
     const newTaskName = document.getElementById('edited-task-name').value;
     const newTaskNote = document.getElementById('edited-task-note').value;
+    const newTaskColor = document.getElementById('edited-task-color').value;
+
 
     // Find the task with the editedTaskId
     const editedTask = selectedList.tasks.find(task => task.id === editedTaskId);
@@ -53,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Update the task details
     editedTask.name = newTaskName;
     editedTask.note = newTaskNote;
+    editedTask.color = newTaskColor;
 
     // Hide the modal
     onTaskCloseModal();
@@ -129,6 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
       label.htmlFor = task.id;
       label.textContent = task.name;
 
+      const taskColor = task.color || 'black'; // add a color property and default it to black
+
       // Function to handle task editing
       function editTask(taskId, taskName, taskNote) {
         // Show the modal
@@ -137,10 +142,13 @@ document.addEventListener("DOMContentLoaded", function () {
         // Set the values in the modal
         document.getElementById('edited-task-name').value = taskName;
         document.getElementById('edited-task-note').value = taskNote;
+        document.getElementById('edited-task-color').value = taskColor;
 
         // Save the task ID for reference
         editedTaskId = taskId;
       }
+      // color task element
+      taskElement.style.color = taskColor;
 
       // Event listener for edit button click
       const editButton = document.createElement('button');
@@ -251,7 +259,13 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     const taskName = newTaskInput.value.trim();
     if (taskName && selectedList) {
-      selectedList.tasks.push({ id: Date.now().toString(), name: taskName, complete: false });
+      const taskColor= 'black';
+      selectedList.tasks.push({ 
+        id: Date.now().toString(), 
+        name: taskName, 
+        complete: false,
+        color: taskColor,
+       });
       newTaskInput.value = '';
       saveAndDisplay();
     }
