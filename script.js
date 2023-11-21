@@ -26,43 +26,107 @@ document.addEventListener("DOMContentLoaded", function () {
     display();
   }
 
-  // Event listener for closing the task edit modal
-  document.querySelector('.close').addEventListener('click', onTaskCloseModal);
-
-  function onTaskCloseModal() {
-    const modal = document.getElementById('task-edit-modal');
-    modal.style.display = 'none';
+  function save() {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(lists));
   }
 
-  // Event listener for overlay click to close the modal
-  document.getElementById('task-edit-modal').addEventListener('click', function (event) {
-    if (event.target === this || event.target.classList.contains('close')) {
-      onTaskCloseModal();
+  function display() {
+    displayLists();
+
+    if (selectedList) {
+      listDisplay.style.display = '';
+      listTitle.innerText = selectedList.name;
+      displayTaskCount();
+      clearElement(tasksDisplay);
+      displayTasks();
+    } else {
+      listDisplay.style.display = 'none';
+    }
+  }
+
+  // displays the lists available to the user
+  function displayLists() {
+    clearElement(listsType);
+    lists.forEach(list => {
+      const listElement = document.createElement('li');
+      listElement.dataset.listId = list.id;
+      listElement.classList.add('list-name');
+      listElement.textContent = list.name;
+
+      // Function to handle list editing
+      function editList(listId, listName) {
+        // Show the modal
+        document.getElementById('list-edit-modal').style.display = 'block';
+
+        // Set the values in the modal
+        document.getElementById('edited-list-name').value = listName;
+
+        // Save the task ID for reference
+        editedListId = listId;
+      }
+
+      // Event listener for edit button click
+      const editButton = document.createElement('button');
+      editButton.classList.add('btn', 'edit-list-button');
+      editButton.textContent = 'Edit';
+      editButton.addEventListener('click', function (event) {
+        event.stopPropagation();
+        editList(list.id, list.name);
+      });
+      listElement.appendChild(editButton);
+
+      if (list === selectedList) {
+        listElement.classList.add('active-list');
+      }
+      listElement.addEventListener('click', () => {
+        selectedList = list;
+        saveAndDisplay();
+      });
+      listsType.appendChild(listElement);
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.target.id === 'delete-list-button') {
+      deleteSelectedList();
     }
   });
 
-  // Event listener for save task changes button click
-  document.getElementById('save-task-changes').addEventListener('click', function () {
-    // Get the edited values from the modal
-    const newTaskName = document.getElementById('edited-task-name').value;
-    const newTaskNote = document.getElementById('edited-task-note').value;
-    const newTaskColor = document.getElementById('edited-task-color').value;
+  function deleteSelectedList() {
+    if (selectedList) {
+      const listId = selectedList.id;
+      const listIndex = lists.findIndex(list => list.id === listId);
+      if (listIndex !== -1) {
+        lists.splice(listIndex, 1); // Remove the selected list
+        selectedList = null; // Deselect the list
+        saveAndDisplay();
+      }
+    }
+  }
 
+  // Event listener for opening the list edit modal
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('edit-list-button')) {
+      const listElement = e.target.parentElement;
+      const listId = listElement.dataset.listId;
+      const listName = listElement.textContent.trim();
 
-    // Find the task with the editedTaskId
-    const editedTask = selectedList.tasks.find(task => task.id === editedTaskId);
-
-    // Update the task details
-    editedTask.name = newTaskName;
-    editedTask.note = newTaskNote;
-    editedTask.color = newTaskColor;
-
-    // Hide the modal
-    onTaskCloseModal();
-
-    // Save and display after updating the task
-    saveAndDisplay();
+      openListEditModal(listId, listName);
+    }
   });
+
+  function openListEditModal(listId, listName) {
+    // Show the modal
+    const listEditModal = document.getElementById('list-edit-modal');
+    listEditModal.style.display = 'block';
+  
+    // Set the values in the modal
+    document.getElementById('edited-list-name').value = listName;
+  
+    // Save the list ID for reference
+    editedListId = listId;
+  }
+
 
   // Event listener for closing the list edit modal
   document.querySelector('.close').addEventListener('click', onListCloseModal);
@@ -94,24 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
       saveAndDisplay();
     }
   });  
-
-  function save() {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(lists));
-  }
-
-  function display() {
-    displayLists();
-
-    if (selectedList) {
-      listDisplay.style.display = '';
-      listTitle.innerText = selectedList.name;
-      displayTaskCount();
-      clearElement(tasksDisplay);
-      displayTasks();
-    } else {
-      listDisplay.style.display = 'none';
-    }
-  }
 
   // populates the tasks for the selected list
   function displayTasks() {
@@ -174,9 +220,22 @@ document.addEventListener("DOMContentLoaded", function () {
         noteElement.style.display = '';
       });
 
+      // Append start icon to the task element
+      const starIcon = document.createElement('span');
+      starIcon.classList.add('star-icon');
+      if (task.starred) {
+        starIcon.classList.add('filled'); // Fill the star icon if it's starred
+      }
+      starIcon.addEventListener('click', function(event) {
+        event.stopPropagation();
+        toggleStarIcon(starIcon, task.id); // Pass the taskId to update localStorage
+      });
+      taskElement.appendChild(starIcon);
+
+
       taskElement.appendChild(checkbox);
       taskElement.appendChild(label);
-      taskElement.appendChild(editButton); // Add the edit button to the task element
+      taskElement.appendChild(editButton); // Adds the edit button to the task element
       taskElement.appendChild(noteElement);
       tasksDisplay.appendChild(taskElement);
     });
@@ -189,46 +248,78 @@ document.addEventListener("DOMContentLoaded", function () {
     taskCounter.innerText = `${incompleteTaskCount} ${taskString} remaining`;
   }
 
-  // displays the lists available to the user
-  function displayLists() {
-    clearElement(listsType);
-    lists.forEach(list => {
-      const listElement = document.createElement('li');
-      listElement.dataset.listId = list.id;
-      listElement.classList.add('list-name');
-      listElement.textContent = list.name;
+  // Event listener for opening the task edit modal
+  tasksDisplay.addEventListener('click', (e) => {
+    if (e.target.classList.contains('edit-task-button')) {
+      const taskId = e.target.parentElement.dataset.taskId;
+      const task = selectedList.tasks.find(task => task.id === taskId);
 
-      // Function to handle list editing
-      function editList(listId, listName) {
-        // Show the modal
-        document.getElementById('list-edit-modal').style.display = 'block';
-
-        // Set the values in the modal
-        document.getElementById('edited-list-name').value = listName;
-
-        // Save the task ID for reference
-        editedListId = listId;
+      if (task) {
+        openTaskEditModal(task);
       }
+    }
+  });
 
-      // Event listener for edit button click
-      const editButton = document.createElement('button');
-      editButton.classList.add('btn', 'edit-list-button');
-      editButton.textContent = 'Edit';
-      editButton.addEventListener('click', function (event) {
-        event.stopPropagation();
-        editList(list.id, list.name);
-      });
-      listElement.appendChild(editButton);
+  // Event listener for closing the task edit modal
+  document.querySelector('.close').addEventListener('click', onTaskCloseModal);
 
-      if (list === selectedList) {
-        listElement.classList.add('active-list');
-      }
-      listElement.addEventListener('click', () => {
-        selectedList = list;
-        saveAndDisplay();
-      });
-      listsType.appendChild(listElement);
-    });
+  function onTaskCloseModal() {
+    const modal = document.getElementById('task-edit-modal');
+    modal.style.display = 'none';
+  }
+
+  // Event listener for overlay click to close the modal
+  document.getElementById('task-edit-modal').addEventListener('click', function (event) {
+    if (event.target === this || event.target.classList.contains('close')) {
+      onTaskCloseModal();
+    }
+  });
+
+  // Event listener for save task changes button click
+  document.getElementById('save-task-changes').addEventListener('click', function () {
+    // Get the edited values from the modal
+    const newTaskName = document.getElementById('edited-task-name').value;
+    const newTaskNote = document.getElementById('edited-task-note').value;
+    const newTaskColor = document.getElementById('edited-task-color').value;
+
+
+    // Find the task with the editedTaskId
+    const editedTask = selectedList.tasks.find(task => task.id === editedTaskId);
+
+    // Update the task details
+    editedTask.name = newTaskName;
+    editedTask.note = newTaskNote;
+    editedTask.color = newTaskColor;
+
+    // Hide the modal
+    onTaskCloseModal();
+
+    // Save and display after updating the task
+    saveAndDisplay();
+  });
+
+  function toggleStarIcon(icon, taskId) {
+    const isFilled = icon.classList.contains('filled');
+  
+    // Update the task's information in localStorage
+    const updatedLists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+    const listToUpdate = updatedLists.find(list => list.id === selectedList.id);
+    const taskToUpdate = listToUpdate.tasks.find(task => task.id === taskId);
+    if (!isFilled) {
+      icon.classList.add('filled');
+      taskToUpdate.starred = true; // Update the task's information
+
+       // Remove the task from its current position in the list
+      const index = listToUpdate.tasks.indexOf(taskToUpdate);
+      listToUpdate.tasks.splice(index, 1);
+
+      // Move the task to the top of the list
+      listToUpdate.tasks.unshift(taskToUpdate);
+    } else {
+      icon.classList.remove('filled');
+      taskToUpdate.starred = false; // Update the task's information
+    }
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedLists)); // Save updated data
   }
 
   // clear the child elements of a given element
@@ -237,6 +328,13 @@ document.addEventListener("DOMContentLoaded", function () {
       element.removeChild(element.firstChild);
     }
   }
+
+  clearCompleteTasksButton.addEventListener('click', e => {
+    if (selectedList) {
+      selectedList.tasks = selectedList.tasks.filter(task => !task.complete);
+      saveAndDisplay();
+    }
+  });
 
   listsType.addEventListener('click', e => {
     if (e.target.tagName.toLowerCase() === 'li') {
@@ -268,67 +366,6 @@ document.addEventListener("DOMContentLoaded", function () {
        });
       newTaskInput.value = '';
       saveAndDisplay();
-    }
-  });
-  
-  clearCompleteTasksButton.addEventListener('click', e => {
-    if (selectedList) {
-      selectedList.tasks = selectedList.tasks.filter(task => !task.complete);
-      saveAndDisplay();
-    }
-  });
-
-  document.addEventListener('click', (e) => {
-    if (e.target.id === 'delete-list-button') {
-      deleteSelectedList();
-    }
-  });
-
-  function deleteSelectedList() {
-    if (selectedList) {
-      const listId = selectedList.id;
-      const listIndex = lists.findIndex(list => list.id === listId);
-      if (listIndex !== -1) {
-        lists.splice(listIndex, 1); // Remove the selected list
-        selectedList = null; // Deselect the list
-        saveAndDisplay();
-      }
-    }
-  }
-  
-
-  // Event listener for opening the list edit modal
-  document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('edit-list-button')) {
-      const listElement = e.target.parentElement;
-      const listId = listElement.dataset.listId;
-      const listName = listElement.textContent.trim();
-
-      openListEditModal(listId, listName);
-    }
-  });
-
-  function openListEditModal(listId, listName) {
-    // Show the modal
-    const listEditModal = document.getElementById('list-edit-modal');
-    listEditModal.style.display = 'block';
-  
-    // Set the values in the modal
-    document.getElementById('edited-list-name').value = listName;
-  
-    // Save the list ID for reference
-    editedListId = listId;
-  }
-
-  // Event listener for opening the task edit modal
-  tasksDisplay.addEventListener('click', (e) => {
-    if (e.target.classList.contains('edit-task-button')) {
-      const taskId = e.target.parentElement.dataset.taskId;
-      const task = selectedList.tasks.find(task => task.id === taskId);
-
-      if (task) {
-        openTaskEditModal(task);
-      }
     }
   });
 

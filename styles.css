@@ -1,5 +1,5 @@
 :root {
-  --clr-primary: rgb(117, 172, 255);
+  --clr-primary: rgb(117, 172, 172);
   --clr-light: #f4f4f4;
   --clr-dark: #333;
   --clr-warning: rgb(36, 99, 98);
@@ -42,10 +42,10 @@ a fraction to use available space so it makes equal spacing. */
   grid-area: lists
 }
 
+
 .task-list {
   font-size: 1.2rem;          /* Set the font size to 1.2 rem units */
   line-height: 1.7;          /* Set the line height to 1.7 (1.7 times the font size) */
-  list-style: circle;        /* Use a circle as the list item marker style */
   padding-left: 1.1em;       /* Add left padding of 1.1em to list items */
 }
 
@@ -76,15 +76,24 @@ form {
   color: inherit;            /* Inherit the color from the parent element */
 }
 
-.btn.create {
+.btn.list {
   font-size: 1.5rem;         /* Set the font size to 1.5 rem units */
   font-weight: 900;          /* Set the font weight to 900 (bold) */
   margin-right: 0.25em;      /* Add right margin of 0.25em */
   transition: opacity 250ms ease-in;  /* Add a smooth opacity transition over 250ms */
 }
+  .btn.list:hover {
+    opacity: 0.7              /* Reduce the opacity to 70% on hover so the user can see where the mouse is @ */
+  }
 
-  .btn.create:hover {
-      opacity: 0.7              /* Reduce the opacity to 70% on hover so the user can see where the mouse is @ */
+.btn.task {
+  font-size: 1.5rem;         /* Set the font size to 1.5 rem units */
+  font-weight: 900;          /* Set the font weight to 900 (bold) */
+  margin-right: 0.25em;      /* Add right margin of 0.25em */
+  transition: opacity 250ms ease-in;  /* Add a smooth opacity transition over 250ms */
+}
+  .btn.task:hover {
+    opacity: 0.7              /* Reduce the opacity to 70% on hover so the user can see where the mouse is @ */
   }
 
 .btn.delete {
@@ -187,7 +196,7 @@ form {
   background: #e4e4e4;
   display: flex;
   align-items: center;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 /* adjusts the margin for elements with the class "list-title" */
@@ -226,7 +235,8 @@ form {
 .task label {
   display: inline-flex;
   align-items: center;
-  position: relative
+  position: relative;
+  left: 20px;
 }
 
 /* styles elements with the class "task" */
@@ -240,10 +250,8 @@ form {
 }
 
 .task .btn.edit-task-button {
-  margin-left: 20px; /* Add margin to the edit button */
+  margin-left: 40px; /* Add margin to the edit button */
 }
-
-
 
 /* adds an underline element after elements with the class "task" */
 .task::after {
@@ -321,7 +329,7 @@ form {
   display: flex;
   justify-content: space-evenly;
   position: absolute;
-  width: 17%;
+  width: 19%;
   margin-top: 40px;
   color: var(--clr-light)
 }
@@ -338,7 +346,7 @@ form {
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: #ffffff;
   margin: 15% auto;
   padding: 20px;
   width: 60%;
@@ -366,4 +374,22 @@ form {
   font-size: 12px;
   color: #888;
   margin-top: 5px;
+  position: relative;
+  left: 50px;
+}
+
+.star-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  border-radius: 50%;
+  cursor: pointer;
+  justify-content: var(--spacer);
+  margin-left: 10px;
+}
+
+/* Filled Start Icon */
+.star-icon.filled {
+  background-color: #FFD700; /* Change color as desired */
 }
