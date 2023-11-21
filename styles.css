@@ -235,6 +235,7 @@ form {
   margin-bottom: 1.00em;
   align-items: center; /* Center align items vertically */
   justify-content: var(--spacer); /* Add space between task name and edit button */
+  color:inherit;
 
 }
 
