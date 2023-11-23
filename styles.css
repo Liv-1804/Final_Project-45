@@ -378,18 +378,20 @@ form {
   left: 50px;
 }
 
-.star-icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #000;
-  border-radius: 50%;
+/* Star Button Styles */
+.star-button {
+  background: none;
+  border: none;
   cursor: pointer;
-  justify-content: var(--spacer);
-  margin-left: 10px;
+  font-size: 20px;
+  color: gray; /* Default color for unstarred tasks */
 }
 
-/* Filled Start Icon */
-.star-icon.filled {
-  background-color: #FFD700; /* Change color as desired */
+.task.starred {
+  color: gold;
+}
+
+/* Star Button Styles for Starred Tasks */
+.star-button.starred {
+  color: gold; /* Change color to gold for starred tasks */
 }

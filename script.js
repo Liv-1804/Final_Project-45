@@ -220,18 +220,17 @@ document.addEventListener("DOMContentLoaded", function () {
         noteElement.style.display = '';
       });
 
-      // Append start icon to the task element
-      const starIcon = document.createElement('span');
-      starIcon.classList.add('star-icon');
-      if (task.starred) {
-        starIcon.classList.add('filled'); // Fill the star icon if it's starred
-      }
-      starIcon.addEventListener('click', function(event) {
-        event.stopPropagation();
-        toggleStarIcon(starIcon, task.id); // Pass the taskId to update localStorage
-      });
-      taskElement.appendChild(starIcon);
+      // Inside displayTasks() function, after creating the taskElement
+      const starButton = document.createElement('button');
+      starButton.classList.add('star-button');
+      starButton.innerHTML = '&#9733;'; // You can use an actual star icon here
 
+      // Event listener for star button click
+      starButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevents the task item click event from triggering
+        toggleStarred(task.id); // Call a function to handle the task starring
+      });
+      taskElement.appendChild(starButton);
 
       taskElement.appendChild(checkbox);
       taskElement.appendChild(label);
@@ -298,29 +297,29 @@ document.addEventListener("DOMContentLoaded", function () {
     saveAndDisplay();
   });
 
-  function toggleStarIcon(icon, taskId) {
-    const isFilled = icon.classList.contains('filled');
+  function toggleStarred(taskId) {
+    const taskIndex = selectedList.tasks.findIndex(task => task.id === taskId);
+    const task = selectedList.tasks[taskIndex];
+    
+    if (task) {
+      task.starred = !task.starred; // Toggle the 'starred' property
+      const starButton = document.getElementById(task.id); 
+      starButton.classList.toggle('starred', task.starred);
   
-    // Update the task's information in localStorage
-    const updatedLists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
-    const listToUpdate = updatedLists.find(list => list.id === selectedList.id);
-    const taskToUpdate = listToUpdate.tasks.find(task => task.id === taskId);
-    if (!isFilled) {
-      icon.classList.add('filled');
-      taskToUpdate.starred = true; // Update the task's information
-
-       // Remove the task from its current position in the list
-      const index = listToUpdate.tasks.indexOf(taskToUpdate);
-      listToUpdate.tasks.splice(index, 1);
-
-      // Move the task to the top of the list
-      listToUpdate.tasks.unshift(taskToUpdate);
-    } else {
-      icon.classList.remove('filled');
-      taskToUpdate.starred = false; // Update the task's information
+      if (task.starred) {
+        // Move the task to the top of the list
+        selectedList.tasks.splice(taskIndex, 1); // Remove the task from its current position
+        selectedList.tasks.unshift(task); // Add the task to the top
+      } else {
+        // Remove the task from the top and place it based on its original completion status
+        const completedTasks = selectedList.tasks.filter(task => task.complete);
+        const uncompletedTasks = selectedList.tasks.filter(task => !task.complete);
+        selectedList.tasks = [...completedTasks, ...uncompletedTasks];
+      }
+  
+      saveAndDisplay(); // Save and update the display
     }
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedLists)); // Save updated data
-  }
+  }  
 
   // clear the child elements of a given element
   function clearElement(element) {
