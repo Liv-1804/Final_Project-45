@@ -1,5 +1,5 @@
 :root {
-  --clr-primary: rgb(117, 172, 172);
+  --clr-primary: rgb(131, 194, 194);
   --clr-light: #f4f4f4;
   --clr-dark: #333;
   --clr-warning: rgb(36, 99, 98);
@@ -32,10 +32,10 @@ a fraction to use available space so it makes equal spacing. */
   grid-area: header; /* Takes up top area*/
   text-align: center;
   font-size: calc(7vw + 2rem); /* Use viewport and rem to set min size and allow it to grow w screen*/
-  font-weight: 900;
+  font-weight: 800;
   color: rgba(0, 0, 0, 0.1);
   letter-spacing: 2px;
-  margin: -0.3em 0 0.5em; /* Makes it higher on the screen*/
+  margin: 0.1em 0 0.2em; /* Makes it higher on the screen*/
 }
 
 .all-tasks {
@@ -89,7 +89,8 @@ form {
 .btn.task {
   font-size: 1.5rem;         /* Set the font size to 1.5 rem units */
   font-weight: 900;          /* Set the font weight to 900 (bold) */
-  margin-right: 0.25em;      /* Add right margin of 0.25em */
+  margin-right: 0.5em;      /* Add right margin of 0.25em */
+  margin-left: 1.5em;
   transition: opacity 250ms ease-in;  /* Add a smooth opacity transition over 250ms */
 }
   .btn.task:hover {
