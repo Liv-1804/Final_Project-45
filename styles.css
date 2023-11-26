@@ -347,6 +347,7 @@ form {
 
 .modal-content {
   background-color: #ffffff;
+  color: black;
   margin: 15% auto;
   padding: 20px;
   width: 60%;
@@ -384,14 +385,4 @@ form {
   border: none;
   cursor: pointer;
   font-size: 20px;
-  color: gray; /* Default color for unstarred tasks */
-}
-
-.task.starred {
-  color: gold;
-}
-
-/* Star Button Styles for Starred Tasks */
-.star-button.starred {
-  color: gold; /* Change color to gold for starred tasks */
 }

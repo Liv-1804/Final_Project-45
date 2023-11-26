@@ -107,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Event listener for opening the list edit modal
   document.addEventListener('click', (e) => {
     if (e.target.classList.contains('edit-list-button')) {
-      const listElement = e.target.parentElement;
       const listId = listElement.dataset.listId;
       const listName = listElement.textContent.trim();
 
@@ -225,10 +224,18 @@ document.addEventListener("DOMContentLoaded", function () {
       starButton.classList.add('star-button');
       starButton.innerHTML = '&#9733;'; // You can use an actual star icon here
 
+      // Function to set the initial color based on the task's star status
+      function setStarColor(task) {
+        starButton.style.color = task.starred ? 'gold' : 'gray';
+      }
+      // Set initial color based on the task's star status
+      setStarColor(task);
+
       // Event listener for star button click
       starButton.addEventListener('click', (event) => {
         event.stopPropagation(); // Prevents the task item click event from triggering
         toggleStarred(task.id); // Call a function to handle the task starring
+        starButton.style.color = 'gold';
       });
       taskElement.appendChild(starButton);
 
@@ -247,6 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
     taskCounter.innerText = `${incompleteTaskCount} ${taskString} remaining`;
   }
 
+  /*
   // Event listener for opening the task edit modal
   tasksDisplay.addEventListener('click', (e) => {
     if (e.target.classList.contains('edit-task-button')) {
@@ -258,6 +266,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   });
+  */
+
 
   // Event listener for closing the task edit modal
   document.querySelector('.close').addEventListener('click', onTaskCloseModal);
@@ -311,6 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedList.tasks.splice(taskIndex, 1); // Remove the task from its current position
         selectedList.tasks.unshift(task); // Add the task to the top
       } else {
+
         // Remove the task from the top and place it based on its original completion status
         const completedTasks = selectedList.tasks.filter(task => task.complete);
         const uncompletedTasks = selectedList.tasks.filter(task => !task.complete);
@@ -320,6 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
       saveAndDisplay(); // Save and update the display
     }
   }  
+
 
   // clear the child elements of a given element
   function clearElement(element) {
