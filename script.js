@@ -254,21 +254,6 @@ document.addEventListener("DOMContentLoaded", function () {
     taskCounter.innerText = `${incompleteTaskCount} ${taskString} remaining`;
   }
 
-  /*
-  // Event listener for opening the task edit modal
-  tasksDisplay.addEventListener('click', (e) => {
-    if (e.target.classList.contains('edit-task-button')) {
-      const taskId = e.target.parentElement.dataset.taskId;
-      const task = selectedList.tasks.find(task => task.id === taskId);
-
-      if (task) {
-        openTaskEditModal(task);
-      }
-    }
-  });
-  */
-
-
   // Event listener for closing the task edit modal
   document.querySelector('.close').addEventListener('click', onTaskCloseModal);
 
