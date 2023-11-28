@@ -1,4 +1,6 @@
+//DOMContentLoaded event listener ensures that the script runs after the HTML content is fully loaded
 document.addEventListener("DOMContentLoaded", function () {
+  //Selecting various elements from the DOM
   const listsType = document.querySelector('[list-type]');
   const newList = document.querySelector('[new-list]');
   const newListInput = document.querySelector('[new-list-input]');
@@ -10,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const newTaskInput = document.querySelector('[new-task-input]');
   const clearCompleteTasksButton = document.querySelector('[clear-complete-tasks-button]');
 
-  // stores and retrieves data from the browser's local storage, so the data is preserved
+  //A key that stores and retrieves data from the browser's local storage, so the data is preserved
   const LOCAL_STORAGE_KEY = 'task.lists';
   let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
   let selectedList = null;
@@ -26,25 +28,29 @@ document.addEventListener("DOMContentLoaded", function () {
     display();
   }
 
+  //Saves lists to local storage
   function save() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(lists));
   }
 
+  //Controls what is displayed in the UI
   function display() {
     displayLists();
 
     if (selectedList) {
+      //Dispalying the selected list's information
       listDisplay.style.display = '';
       listTitle.innerText = selectedList.name;
       displayTaskCount();
       clearElement(tasksDisplay);
       displayTasks();
     } else {
-      listDisplay.style.display = 'none';
+      listDisplay.style.display = 'none';                       // Hiding list display if no list is selected
     }
   }
+  
 
-  // displays the lists available to the user
+  //Displays the lists available to the user
   function displayLists() {
     clearElement(listsType);
     lists.forEach(list => {
@@ -53,15 +59,10 @@ document.addEventListener("DOMContentLoaded", function () {
       listElement.classList.add('list-name');
       listElement.textContent = list.name;
 
-      // Function to handle list editing
+      //Handles list editing
       function editList(listId, listName) {
-        // Show the modal
         document.getElementById('list-edit-modal').style.display = 'block';
-
-        // Set the values in the modal
         document.getElementById('edited-list-name').value = listName;
-
-        // Save the task ID for reference
         editedListId = listId;
       }
 
@@ -86,12 +87,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  //Event Listener for the delete list button
   document.addEventListener('click', (e) => {
     if (e.target.id === 'delete-list-button') {
       deleteSelectedList();
     }
   });
 
+  //Deletes selected list
   function deleteSelectedList() {
     if (selectedList) {
       const listId = selectedList.id;
@@ -114,15 +117,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //Handles opening the edit modal for list
   function openListEditModal(listId, listName) {
-    // Show the modal
     const listEditModal = document.getElementById('list-edit-modal');
     listEditModal.style.display = 'block';
-  
-    // Set the values in the modal
     document.getElementById('edited-list-name').value = listName;
-  
-    // Save the list ID for reference
     editedListId = listId;
   }
 
@@ -130,6 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Event listener for closing the list edit modal
   document.querySelector('.close').addEventListener('click', onListCloseModal);
 
+  //Handles closing the list edit modal
   function onListCloseModal() {
     const modal = document.getElementById('list-edit-modal');
     modal.style.display = 'none';
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });  
 
-  // populates the tasks for the selected list
+  //Displays the tasks for the selected list
   function displayTasks() {
     clearElement(tasksDisplay);
     selectedList.tasks.forEach(task => {
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
       label.htmlFor = task.id;
       label.textContent = task.name;
 
-      const taskColor = task.color || 'black'; // add a color property and default it to black
+      const taskColor = task.color || 'black'; 
 
       // Function to handle task editing
       function editTask(taskId, taskName, taskNote) {
@@ -195,10 +195,12 @@ document.addEventListener("DOMContentLoaded", function () {
       // color task element
       taskElement.style.color = taskColor;
 
-      // Event listener for edit button click
+      //Creating the edit task button
       const editButton = document.createElement('button');
       editButton.classList.add('btn', 'edit-task-button');
       editButton.textContent = 'Edit';
+
+      //Event listener for edit button click
       editButton.addEventListener('click', function (event) {
         event.stopPropagation();
         editTask(task.id, task.name, task.note);
@@ -237,13 +239,13 @@ document.addEventListener("DOMContentLoaded", function () {
         toggleStarred(task.id); // Call a function to handle the task starring
         starButton.style.color = 'gold';
       });
-      taskElement.appendChild(starButton);
+      taskElement.appendChild(starButton);            // Adds the star button to the task element
 
-      taskElement.appendChild(checkbox);
-      taskElement.appendChild(label);
-      taskElement.appendChild(editButton); // Adds the edit button to the task element
-      taskElement.appendChild(noteElement);
-      tasksDisplay.appendChild(taskElement);
+      taskElement.appendChild(checkbox);              // Adds the checkbox attribute  to the task element
+      taskElement.appendChild(label);                 
+      taskElement.appendChild(editButton);            // Adds the edit button to the task element
+      taskElement.appendChild(noteElement);           // Adds the note attribute to the task element
+      tasksDisplay.appendChild(taskElement);          // Adds the task element
     });
   }
 
@@ -257,6 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Event listener for closing the task edit modal
   document.querySelector('.close').addEventListener('click', onTaskCloseModal);
 
+  //Handles closing the task edit modal
   function onTaskCloseModal() {
     const modal = document.getElementById('task-edit-modal');
     modal.style.display = 'none';
@@ -276,7 +279,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const newTaskNote = document.getElementById('edited-task-note').value;
     const newTaskColor = document.getElementById('edited-task-color').value;
 
-
     // Find the task with the editedTaskId
     const editedTask = selectedList.tasks.find(task => task.id === editedTaskId);
 
@@ -292,6 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
     saveAndDisplay();
   });
 
+  //Toggles task's starred status
   function toggleStarred(taskId) {
     const taskIndex = selectedList.tasks.findIndex(task => task.id === taskId);
     const task = selectedList.tasks[taskIndex];
@@ -317,14 +320,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }  
 
-
-  // clear the child elements of a given element
+  //Clears the child elements of a given element
   function clearElement(element) {
     while (element.firstChild) {
       element.removeChild(element.firstChild);
     }
   }
 
+  //Event listener for clearing completed tasks
   clearCompleteTasksButton.addEventListener('click', e => {
     if (selectedList) {
       selectedList.tasks = selectedList.tasks.filter(task => !task.complete);
@@ -332,6 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //Event listener for selecting a list
   listsType.addEventListener('click', e => {
     if (e.target.tagName.toLowerCase() === 'li') {
       selectedList = lists.find(list => list.id === e.target.dataset.listId);
@@ -339,6 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //Event listener for adding a new list
   newList.addEventListener('submit', e => {
     e.preventDefault();
     const listName = newListInput.value.trim();
@@ -349,6 +354,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //Event listener for adding a new task
   newTask.addEventListener('submit', e => {
     e.preventDefault();
     const taskName = newTaskInput.value.trim();
