@@ -218,7 +218,6 @@ document.addEventListener("DOMContentLoaded", function () {
       starButton.addEventListener('click', (event) => {
         event.stopPropagation(); // Prevents the task item click event from triggering
         toggleStarred(task.id); // Call a function to handle the task starring
-        starButton.style.color = 'gold';
       });
       taskElement.appendChild(starButton);            // Adds the star button to the task element
 
