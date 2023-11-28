@@ -107,25 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Event listener for opening the list edit modal
-  document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('edit-list-button')) {
-      const listId = listElement.dataset.listId;
-      const listName = listElement.textContent.trim();
-
-      openListEditModal(listId, listName);
-    }
-  });
-
-  //Handles opening the edit modal for list
-  function openListEditModal(listId, listName) {
-    const listEditModal = document.getElementById('list-edit-modal');
-    listEditModal.style.display = 'block';
-    document.getElementById('edited-list-name').value = listName;
-    editedListId = listId;
-  }
-
-
   // Event listener for closing the list edit modal
   document.querySelector('.close').addEventListener('click', onListCloseModal);
 
